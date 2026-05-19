@@ -1,0 +1,17 @@
+# 虚拟环境
+.venv/
+
+# 数据文件
+*.xlsx
+
+# Python 缓存
+__pycache__/
+*.pyc
+*.pyo
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
