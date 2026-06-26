@@ -19,6 +19,12 @@ def run_pipeline(
 
     clean_df, log_df = clean_data(df)
 
+    screen_order = (
+        clean_df["每一屏名称"]
+        .drop_duplicates()
+        .tolist()
+    )
+
     print("聚合计算...")
 
     group_df = aggregate_data(clean_df)
@@ -32,7 +38,8 @@ def run_pipeline(
     export_report(
         result_df,
         log_df,
-        output_excel
+        output_excel,
+        screen_order
     )
 
     print("分析完成")

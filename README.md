@@ -69,4 +69,14 @@ python main.py
 
 ```text
 L99_TOPSIS_Analysis_Result.xlsx
+L99_TOPSIS_Analysis_Result.json
+L99_TOPSIS_Analysis_Result_interactive_chart.html
 ```
+
+Excel 文件包含：
+
+- `TOPSIS关注度排名`
+- `异常修正日志`
+- `关注度得分图表`
+
+交互式 HTML 图表按屏幕顺序展示 TOPSIS 关注度得分趋势，鼠标 hover 时显示 `排名 x（得分）`。
