@@ -82,14 +82,15 @@ python3 -m venv .venv
 |------|--------|------|
 | `EXPOSURE_THRESHOLD` | 20 | 曝光人数低于此值的数据会被剔除 |
 | `AVG_DURATION_ANOMALY_THRESHOLD` | 1000 | 日均曝光时长超过此值视为异常 |
-| `EXCLUDE_SCREENS` | `["scene-download", "scene-overview-firstscreen scene-first"]` | 需要排除的特殊页面 |
+| `EXCLUDE_SCREENS` | `["scene-download", "scene-overview-firstscreen scene-first", "scene-0 scene-first"]` | 需要排除的特殊页面 |
+| `EXCLUDE_LAST_SCREEN` | `True` | 是否剔除每个日期访问序列中的最后一屏，不参与 TOPSIS 得分 |
 | `TOPSIS_WEIGHTS` | `{"平均曝光时长": 0.7, "退出率": 0.3}` | TOPSIS 各指标权重 |
 
 ## 分析流水线详解
 
 1. **数据清洗**（app/cleaning.py）
    - 剔除曝光人数 < 20 的低质量数据
-   - 排除下载页、首屏等特殊页面
+   - 排除下载页、首屏、每个日期访问序列中的最后一屏等特殊页面
    - 异常值修正：日均曝光时长 > 1000 的记录，用前后日期的均值替代
 
 2. **聚合计算**（app/aggregation.py）

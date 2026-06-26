@@ -3,7 +3,8 @@ import pandas as pd
 from .config import (
     EXPOSURE_THRESHOLD,
     AVG_DURATION_ANOMALY_THRESHOLD,
-    EXCLUDE_SCREENS
+    EXCLUDE_SCREENS,
+    EXCLUDE_LAST_SCREEN
 )
 
 
@@ -20,6 +21,17 @@ def clean_data(df):
 
     date_col = possible_date_cols[0]
 
+    last_screens_to_exclude = []
+    if EXCLUDE_LAST_SCREEN:
+        last_screens_to_exclude = (
+            df
+            .sort_values(by=date_col)
+            .groupby(date_col, sort=False)[screen_col]
+            .last()
+            .dropna()
+            .unique()
+        )
+
     clean_df = df.copy()
 
     # 确保曝光时长列为浮点类型，避免修正时类型冲突
@@ -30,9 +42,15 @@ def clean_data(df):
         clean_df[exposure_user_col] >= EXPOSURE_THRESHOLD
     ].copy()
 
+    excluded_screens = set(EXCLUDE_SCREENS)
+
+    # 剔除每个日期下原始访问序列中的最后一屏，不参与 TOPSIS 得分
+    if EXCLUDE_LAST_SCREEN:
+        excluded_screens.update(last_screens_to_exclude)
+
     # 剔除特殊页面
     clean_df = clean_df[
-        ~clean_df[screen_col].isin(EXCLUDE_SCREENS)
+        ~clean_df[screen_col].isin(excluded_screens)
     ].copy()
 
     adjustment_logs = []
